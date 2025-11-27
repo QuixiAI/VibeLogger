@@ -1,0 +1,23 @@
+__pycache__/
+*.pyc
+.claude/
+.DS_Store
+.env
+phoenix-data/
+
+# Python Virtual Environments
+venv/
+.venv/
+env/
+
+# Logs
+*.log
+
+# Editor Settings
+.vscode/
+.idea/
+
+# Distribution / Build
+build/
+dist/
+*.egg-info/

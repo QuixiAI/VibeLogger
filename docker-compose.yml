@@ -1,0 +1,37 @@
+services:
+  phoenix:
+    image: arizephoenix/phoenix:latest
+    ports:
+      - "6006:6006"  # UI and OTLP HTTP collector
+      - "4317:4317"  # OTLP gRPC collector
+    volumes:
+      - phoenix-data:/root/.phoenix
+
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${PROXY_PORT:-8082}:8082"
+    environment:
+      - COLLECTOR_ENDPOINT=http://phoenix:6006/v1/traces
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+    depends_on:
+      - phoenix
+    healthcheck:
+      # Use python (already in the image) for healthcheck to avoid missing curl
+      test: ["CMD", "python", "-c", "import urllib.request, sys; urllib.request.urlopen('http://localhost:8082/health')"]
+      interval: 5s
+      timeout: 1s
+      retries: 5
+
+volumes:
+  phoenix-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PHOENIX_DATA_DIR:-${HOME}/phoenix-data}

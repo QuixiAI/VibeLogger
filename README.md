@@ -26,7 +26,7 @@ Perfect for:
 
 ## Compatibility
 
-Scoped to: Claude Code, OpenAI Codex, and the QuixiAI fork of Gemini CLI (with `-url`). These work because they use distinct API paths and support OAuth passthrough. Other clients such as open-code, continue.dev, rooCode, cline, or local runtimes (vLLM/sglang/ollama/lmstudio/llamacpp) are untested/unsupported.
+Scoped to: Claude Code, OpenAI Codex, and the QuixiAI fork of Gemini CLI (with `--base-url`). These work because they use distinct API paths and support OAuth passthrough. Other clients such as open-code, continue.dev, rooCode, cline, or local runtimes (vLLM/sglang/ollama/lmstudio/llamacpp) are untested/unsupported.
 
 ## Prerequisites
 

@@ -95,11 +95,11 @@ If your client only honors standard proxy variables, set `HTTP_PROXY` / `HTTPS_P
 
 ### Compatibility map
 
-| Tool | How to point at the proxy | Notes |
-| --- | --- | --- |
-| Claude Code | `ANTHROPIC_BASE_URL=http://localhost:8082` | Tested |
-| OpenAI Codex | `OPENAI_BASE_URL=http://localhost:8082/v1` | Tested |
-| Gemini CLI (QuixiAI fork) | `npm install -g github:QuixiAI/gemini-cli` then `gemini --base-url http://localhost:8082 "<prompt>"` | Tested; `--base-url` flag comes from the fork |
+| Tool | How to point at the proxy |
+| --- | --- |
+| Claude Code | `ANTHROPIC_BASE_URL=http://localhost:8082` |
+| OpenAI Codex | `OPENAI_BASE_URL=http://localhost:8082/v1` |
+| Gemini CLI (QuixiAI fork) | `npm install -g github:QuixiAI/gemini-cli` then `gemini --base-url http://localhost:8082 "<prompt>"` |
 
 ### Claude / Claude Code
 

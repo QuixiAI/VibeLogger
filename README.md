@@ -26,7 +26,7 @@ Perfect for:
 
 ## Compatibility
 
-Scoped to: Claude Code, OpenAI Codex, and the QuixiAI fork of Gemini CLI (with `--base-url`). These work because they use distinct API paths and support OAuth passthrough. Other clients such as open-code, continue.dev, rooCode, cline, or local runtimes (vLLM/sglang/ollama/lmstudio/llamacpp) are untested/unsupported.
+Scoped to: Claude Code, OpenAI Codex, and the QuixiAI fork of Gemini CLI (with `-url`). These work because they use distinct API paths and support OAuth passthrough. Other clients such as open-code, continue.dev, rooCode, cline, or local runtimes (vLLM/sglang/ollama/lmstudio/llamacpp) are untested/unsupported.
 
 ## Prerequisites
 
@@ -99,7 +99,7 @@ If your client only honors standard proxy variables, set `HTTP_PROXY` / `HTTPS_P
 | --- | --- |
 | Claude Code | `ANTHROPIC_BASE_URL=http://localhost:8082` |
 | OpenAI Codex | `OPENAI_BASE_URL=http://localhost:8082/v1` |
-| Gemini CLI (QuixiAI fork) | `npm install -g github:QuixiAI/gemini-cli` then `gemini --base-url http://localhost:8082 "<prompt>"` |
+| Gemini CLI (QuixiAI fork) | `npm install -g github:QuixiAI/gemini-cli` then `gemini -url http://localhost:8082 "<prompt>"` |
 
 ### Claude / Claude Code
 
@@ -121,7 +121,7 @@ codex
 
 ### Gemini CLI
 
-Standard Gemini CLI tools don't natively support proxies well. Use the [QuixiAI fork of gemini-cli](https://github.com/QuixiAI/gemini-cli) which adds the `--base` flag.
+Standard Gemini CLI tools don't natively support proxies well. Use the [QuixiAI fork of gemini-cli](https://github.com/QuixiAI/gemini-cli) which adds the `--base-url` flag.
 
 ```sh
 # Install gemini-cli

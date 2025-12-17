@@ -644,7 +644,7 @@ async def logging_middleware(request, handler):
 
 
 async def init_app():
-    app = web.Application(middlewares=[logging_middleware])
+    app = web.Application(middlewares=[logging_middleware], client_max_size=100*1024*1024)
 
     # Simple liveness endpoint for container health checks
     async def handle_health(_: web.Request) -> web.Response:

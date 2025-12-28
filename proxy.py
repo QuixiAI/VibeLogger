@@ -17,7 +17,7 @@ from typing import Dict, Any, List
 
 from aiohttp import web
 import aiohttp
-import multidict
+from multidict import CIMultiDict
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor

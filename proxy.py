@@ -4,6 +4,7 @@
 # dependencies = [
 #     "aiohttp",
 #     "arize-phoenix-otel",
+#     "multidict",
 #     "opentelemetry-api",
 #     "opentelemetry-sdk",
 #     "pyyaml",
@@ -12,17 +13,18 @@
 
 import json
 import logging
-import yaml
 from typing import Dict, Any, List
+
 from aiohttp import web
 import aiohttp
-
+from multidict import CIMultiDict
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.resources import Resource
 from openinference.semconv.trace import SpanAttributes
+import yaml
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -285,10 +287,14 @@ async def handle_generate_content(request):
                             response_json.get("usageMetadata", {}).get("totalTokenCount", 0),
                         )
 
+                        mutable_headers = CIMultiDict(upstream_response.headers)
+                        mutable_headers.pop('Transfer-Encoding', None)
+                        mutable_headers.pop('Content-Encoding', None)
+
                         return web.Response(
                             status=upstream_response.status,
                             body=response_body,
-                            headers=dict(upstream_response.headers),
+                            headers=mutable_headers,
                         )
 
         except Exception as e:

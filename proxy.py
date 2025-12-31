@@ -665,6 +665,7 @@ async def init_app():
     app.router.add_route("*", "/v1/chat/completions", handle_openai_request)
     app.router.add_route("*", "/v1/completions", handle_openai_request)
     app.router.add_route("*", "/v1/responses", handle_openai_request)  # ChatGPT codex_cli uses this
+    app.router.add_route("*", "/v1/responses/{tail:.*}", handle_openai_request)  # Codex compact, etc.
     app.router.add_route("*", "/v1/embeddings", handle_openai_request)
     app.router.add_route("*", "/v1/models", handle_openai_request)
     app.router.add_route("*", "/v1/images/generations", handle_openai_request)

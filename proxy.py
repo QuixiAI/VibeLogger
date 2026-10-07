@@ -3,6 +3,7 @@
 # requires-python = ">=3.9"
 # dependencies = [
 #     "aiohttp",
+#     "brotli",
 #     "arize-phoenix-otel",
 #     "opentelemetry-api",
 #     "opentelemetry-sdk",

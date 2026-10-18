@@ -2,3 +2,4 @@ phoenix_collector_endpoint: "http://phoenix:6006/v1/traces"
 gemini_base_url: null # Optional, defaults to library default if null
 anthropic_upstream_base: "https://api.anthropic.com" # Optional override for Anthropic upstream
 openai_upstream_base: "https://api.openai.com" # Default OpenAI API base
+meta_upstream_base: "https://api.meta.ai" # Muse API origin (no /v1 suffix)

@@ -1,6 +1,6 @@
 # Quixi VibeLogger
 
-A lightweight, observable LLM API proxy with built-in tracing for OpenAI, Anthropic, and Google Gemini. Capture and visualize all your LLM traffic using Arize Phoenix.
+A lightweight, observable LLM API proxy with built-in tracing for OpenAI, Anthropic, Google Gemini, and Meta Muse. Capture and visualize all your LLM traffic using Arize Phoenix.
 
 ## Why this exists
 
@@ -8,7 +8,7 @@ Native OAuth passthrough for the Big 3 agentic CLIs (Claude Code, OpenAI Codex, 
 
 ## Features
 
-- 🔄 **Multi-Provider Support**: Proxies OpenAI (`/v1/*`), Anthropic (`/v1/messages/*`), and Gemini (`/v1beta/*`) API endpoints
+- 🔄 **Multi-Provider Support**: Proxies OpenAI (`/v1/*`), Anthropic (`/v1/messages/*`), Gemini (`/v1beta/*`), and Meta Muse (`/meta/v1/*`, `/muse-code/*`) API endpoints
 - 📊 **Built-in Observability**: Automatic OpenTelemetry tracing to Arize Phoenix
 - 🌊 **Streaming Support**: Full support for streaming responses with token usage capture
 - 🐳 **Docker-Ready**: Complete Docker Compose setup with Phoenix included
@@ -26,7 +26,7 @@ Perfect for:
 
 ## Compatibility
 
-Scoped to: Claude Code, OpenAI Codex, and the QuixiAI fork of Gemini CLI (with `--base-url`). These work because they use distinct API paths and support OAuth passthrough. Other clients such as open-code, continue.dev, rooCode, cline, or local runtimes (vLLM/sglang/ollama/lmstudio/llamacpp) are untested/unsupported.
+Scoped to: Claude Code, OpenAI Codex, the QuixiAI fork of Gemini CLI (with `--base-url`), and Meta Muse (with `--base-url`). Muse routing was verified against local mock upstreams with Muse 1.4.6-R6000.1; a live authenticated Meta completion has not been verified. Other clients such as open-code, continue.dev, rooCode, cline, or local runtimes (vLLM/sglang/ollama/lmstudio/llamacpp) are untested/unsupported.
 
 ## Prerequisites
 
@@ -86,6 +86,7 @@ phoenix_collector_endpoint: "http://phoenix:6006/v1/traces"
 gemini_base_url: null
 anthropic_upstream_base: "https://api.anthropic.com"
 openai_upstream_base: "https://api.openai.com"
+meta_upstream_base: "https://api.meta.ai"
 ```
 
 ## Usage
@@ -98,6 +99,7 @@ If your client only honors standard proxy variables, set `HTTP_PROXY` / `HTTPS_P
 | Tool | How to point at the proxy |
 | --- | --- |
 | Claude Code | `ANTHROPIC_BASE_URL=http://localhost:8082` |
+| Meta Muse | `muse --base-url http://localhost:8082/meta/v1` |
 | OpenAI Codex | `OPENAI_BASE_URL=http://localhost:8082/v1` |
 | Gemini CLI (QuixiAI fork) | `npm install -g github:QuixiAI/gemini-cli` then `gemini -url http://localhost:8082 "<prompt>"` |
 
@@ -118,6 +120,34 @@ Point OpenAI-compatible tools to the proxy using `OPENAI_BASE_URL`. Note that fo
 export OPENAI_BASE_URL="http://localhost:8082/v1"
 codex
 ```
+
+### Meta Muse
+
+Keep your normal Muse login and override the provider URL:
+
+```sh
+muse --base-url http://localhost:8082/meta/v1
+# Headless runs:
+muse exec --base-url http://localhost:8082/meta/v1 "Reply with OK."
+```
+
+The proxy strips `/meta` and forwards `/v1/responses` (including streaming),
+other `/v1/*` provider calls, and Muse's `/meta/muse-code/*` and origin-relative `/muse-code/*` calls to
+`https://api.meta.ai`. It preserves Muse's authorization and session headers,
+and records request/response bodies and token usage in Phoenix. The separate
+prefix allows Claude Code and OpenAI clients to keep their existing settings.
+Muse's launcher downloads and login traffic are separate from provider requests
+and are not redirected by this option.
+
+After updating the proxy source, rebuild just the proxy service:
+
+```sh
+cd ~/VibeLogger
+docker compose up -d --build --no-deps proxy
+```
+
+This recreates the proxy container and briefly interrupts active streams; run it
+between Claude Code requests. Phoenix's container and stored traces remain in place.
 
 ### Gemini CLI
 
